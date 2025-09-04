@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NatureRelax — Calma profunda</title>
+  <style>
+    :root {
+      --bg1: #f7fbf9;
+      --bg2: #e9f6f2;
+      --panel: rgba(255,255,255,0.75);
+      --accent: #0f8a6f;
+      --accent2: #49b79e;
+      --radius: 18px;
+      --shadow: 0 18px 40px rgba(0,0,0,0.08);
+    }
+    body {
+      margin: 0;
+      font-family: Inter, sans-serif;
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: #2f4f4f;
+    }
+    .app { max-width: 1000px; margin: auto; padding: 30px; }
+    .card {
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+    }
+    h1 { font-size: 32px; margin: 0 0 10px; }
+    h2 { font-size: 22px; margin-top: 0; }
+    .controls { display: flex; flex-direction: column; gap: 12px; }
+    .control-row { display: flex; align-items: center; gap: 10px; }
+    input[type=range] { flex: 1; }
+    .btn {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-cta {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      color: white;
+    }
+    /* Respiración */
+    .breath-circle {
+      width: 150px; height: 150px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, var(--accent2), var(--accent));
+      margin: 20px auto;
+      opacity: 0.85;
+      transform: scale(1);
+      transition: transform 4s ease-in-out;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+      gap: 12px;
+    }
+    .gallery img {
+      width: 100%; height: 160px; object-fit: cover;
+      border-radius: 12px;
+    }
+    .footer {
+      text-align: center; font-size: 13px; opacity: 0.7; margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="card">
+      <h1>🌿 NatureRelax</h1>
+      <p>Un refugio sonoro y visual para soltar tensión y reencontrar tu calma.</p>
+    </header>
+
+    <!-- Sonidos ambientales -->
+    <section class="card">
+      <h2>🎧 Sonidos ambientales</h2>
+      <div class="controls">
+        <div class="control-row">
+          <input type="checkbox" id="lluvia"> Lluvia
+          <input type="range" id="volLluvia" min="0" max="1" step="0.01" value="0.5">
+        </div>
+        <div class="control-row">
+          <input type="checkbox" id="bosque"> Bosque
+          <input type="range" id="volBosque" min="0" max="1" step="0.01" value="0.5">
+        </div>
+        <div class="control-row">
+          <input type="checkbox" id="viento"> Viento
+          <input type="range" id="volViento" min="0" max="1" step="0.01" value="0.5">
+        </div>
+        <div class="control-row">
+          <input type="checkbox" id="cuenco"> Cuenco tibetano
+          <input type="range" id="volCuenco" min="0" max="1" step="0.01" value="0.5">
+        </div>
+      </div>
+    </section>
+
+    <!-- Ejercicio de respiración -->
+    <section class="card">
+      <h2>🌬️ Respiración guiada</h2>
+      <div class="breath-circle" id="circle"></div>
+      <p id="breathText" style="text-align:center;font-weight:600;">Pulsa iniciar</p>
+      <div style="text-align:center;">
+        <button class="btn btn-cta" id="startBreath">Iniciar</button>
+      </div>
+    </section>
+
+    <!-- Música -->
+    <section class="card">
+      <h2>🎵 Música relajante</h2>
+      <audio controls loop style="width:100%;">
+        <source src="https://www.bensound.com/bensound-music/bensound-relaxing.mp3" type="audio/mpeg">
+        Tu navegador no soporta el audio.
+      </audio>
+    </section>
+
+    <!-- Galería -->
+    <section class="card">
+      <h2>🌄 Galería para contemplar</h2>
+      <div class="gallery">
+        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200" alt="Paisaje 1">
+        <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=1200" alt="Paisaje 2">
+        <img src="https://images.unsplash.com/photo-1503264116251-35a269479413?w=1200" alt="Paisaje 3">
+      </div>
+    </section>
+
+    <footer class="footer">✨ NatureRelax · Belleza y calma para tu día</footer>
+  </div>
+
+  <script>
+    // --- Sonidos ambientales ---
+    const sonidos = {
+      lluvia: new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_4f9d0870f1.mp3?filename=rain-ambient-11066.mp3"),
+      bosque: new Audio("https://cdn.pixabay.com/download/audio/2021/09/23/audio_5d6f2a9c2f.mp3?filename=forest-ambience-9091.mp3"),
+      viento: new Audio("https://cdn.pixabay.com/download/audio/2021/09/13/audio_7fa7f9c5e3.mp3?filename=wind-blowing-in-trees-ambient-7399.mp3"),
+      cuenco: new Audio("https://cdn.pixabay.com/download/audio/2021/09/09/audio_44b3d7a2f8.mp3?filename=sound-bowl-1-6391.mp3")
+    };
+    Object.values(sonidos).forEach(a=>{ a.loop = true; a.volume=0.5; });
+
+    function setupSound(id, audio, volId) {
+      document.getElementById(id).addEventListener("change", e=>{
+        if(e.target.checked) audio.play(); else audio.pause();
+      });
+      document.getElementById(volId).addEventListener("input", e=>{
+        audio.volume = e.target.value;
+      });
+    }
+    setupSound("lluvia", sonidos.lluvia, "volLluvia");
+    setupSound("bosque", sonidos.bosque, "volBosque");
+    setupSound("viento", sonidos.viento, "volViento");
+    setupSound("cuenco", sonidos.cuenco, "volCuenco");
+
+    // --- Respiración guiada ---
+    const circle = document.getElementById("circle");
+    const breathText = document.getElementById("breathText");
+    const startBreath = document.getElementById("startBreath");
+    let breathing = false;
+
+    startBreath.addEventListener("click", ()=>{
+      if(breathing) { breathing=false; breathText.textContent="Sesión detenida"; return; }
+      breathing = true;
+      cycle();
+    });
+
+    function cycle() {
+      if(!breathing) return;
+      breathText.textContent = "Inhala (4s)";
+      circle.style.transform = "scale(1.4)";
+      setTimeout(()=>{
+        if(!breathing) return;
+        breathText.textContent = "Mantén (2s)";
+        setTimeout(()=>{
+          if(!breathing) return;
+          breathText.textContent = "Exhala (6s)";
+          circle.style.transform = "scale(1)";
+          setTimeout(cycle, 6000);
+        },2000);
+      },4000);
+    }
+  </script>
+</body>
+</html>
